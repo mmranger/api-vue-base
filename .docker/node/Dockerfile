@@ -19,7 +19,7 @@ ARG APP_GROUP_ID=1000
 # RUN /tmp/scripts/create_user.sh ${APP_USER} ${APP_GROUP} ${APP_USER_ID} ${APP_GROUP_ID}
 
 # workdir
-ARG APP_CODE_PATH="/var/lib"
+ARG APP_CODE_PATH="/var/www/current"
 WORKDIR "$APP_CODE_PATH"
 
 # entrypoint

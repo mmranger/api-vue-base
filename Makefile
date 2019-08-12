@@ -12,9 +12,13 @@ help:
 .docker/.env:
 	cp $(DOCKER_COMPOSE_DIR)/.env.example $(DOCKER_COMPOSE_DIR)/.env
 
+# .PHONY: docker-clean
+# docker-clean: ## Remove the .env file for docker
+# 	rm -f $(DOCKER_COMPOSE_DIR)/.env
+
 .PHONY: docker-clean
-docker-clean: ## Remove the .env file for docker
-	rm -f $(DOCKER_COMPOSE_DIR)/.env
+docker-clean: docker-init ## Build all docker images from scratch, without cache etc. Build a specific image by providing the service name via: make docker-build CONTAINER=<service>
+	$(DOCKER_COMPOSE) rm -fs $(CONTAINER)
 
 .PHONY: docker-init
 docker-init: .docker/.env ## Make sure the .env file exists for docker

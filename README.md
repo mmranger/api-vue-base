@@ -2,9 +2,12 @@
 
 ## Start
 
-### Build docker compose
+### Build this project
 
-* ```make docker-up```
+* clone the project
+* change the directory (api-vue-base) name to your project name
+* remove .git directory so can init and add to your repo
+* ```make docker-build```
 
 ## Vue (front) located on port 80
 
