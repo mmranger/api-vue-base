@@ -98,4 +98,4 @@ services:
       - backend
     ports:
       - "${NODE_HOST_HTTP_PORT}:8080"
-    command: 'yarn serve'
+    command: 'npm run serve'

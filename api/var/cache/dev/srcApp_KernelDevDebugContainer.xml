@@ -10,16 +10,11 @@
     <parameter key="kernel.logs_dir">/var/www/current/var/log</parameter>
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
-      <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
     </parameter>
     <parameter key="kernel.bundles_metadata" type="collection">
       <parameter key="FrameworkBundle" type="collection">
         <parameter key="path">/var/www/current/vendor/symfony/framework-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\FrameworkBundle</parameter>
-      </parameter>
-      <parameter key="SensioFrameworkExtraBundle" type="collection">
-        <parameter key="path">/var/www/current/vendor/sensio/framework-extra-bundle</parameter>
-        <parameter key="namespace">Sensio\Bundle\FrameworkExtraBundle</parameter>
       </parameter>
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
@@ -41,7 +36,7 @@
       <parameter key="cookie_samesite">lax</parameter>
       <parameter key="gc_probability">1</parameter>
     </parameter>
-    <parameter key="session.save_path">/var/www/current/var/cache/dev/sessions</parameter>
+    <parameter key="session.save_path"></parameter>
     <parameter key="session.metadata.update_threshold">0</parameter>
     <parameter key="data_collector.templates" type="collection"/>
     <parameter key="debug.error_handler.throw_at">-1</parameter>
@@ -255,14 +250,6 @@
         <argument>2048</argument>
       </call>
       <call method="addListener">
-        <argument>console.command</argument>
-        <argument type="collection">
-          <argument type="service" id="debug.debug_handlers_listener"/>
-          <argument>configure</argument>
-        </argument>
-        <argument>2048</argument>
-      </call>
-      <call method="addListener">
         <argument>kernel.exception</argument>
         <argument type="collection">
           <argument type="service" id="debug.debug_handlers_listener"/>
@@ -293,46 +280,6 @@
           <argument>onKernelException</argument>
         </argument>
         <argument>-64</argument>
-      </call>
-      <call method="addListener">
-        <argument>kernel.controller</argument>
-        <argument type="collection">
-          <argument type="service" id="sensio_framework_extra.controller.listener"/>
-          <argument>onKernelController</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
-      <call method="addListener">
-        <argument>kernel.controller</argument>
-        <argument type="collection">
-          <argument type="service" id="sensio_framework_extra.converter.listener"/>
-          <argument>onKernelController</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
-      <call method="addListener">
-        <argument>kernel.controller</argument>
-        <argument type="collection">
-          <argument type="service" id="sensio_framework_extra.cache.listener"/>
-          <argument>onKernelController</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
-      <call method="addListener">
-        <argument>kernel.response</argument>
-        <argument type="collection">
-          <argument type="service" id="sensio_framework_extra.cache.listener"/>
-          <argument>onKernelResponse</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
-      <call method="addListener">
-        <argument>kernel.controller_arguments</argument>
-        <argument type="collection">
-          <argument type="service" id="framework_extra_bundle.event.is_granted"/>
-          <argument>onKernelControllerArguments</argument>
-        </argument>
-        <argument>0</argument>
       </call>
     </service>
     <service id="http_kernel" class="Symfony\Component\HttpKernel\HttpKernel" public="true">
@@ -376,6 +323,26 @@
     </service>
     <service id="config.resource.self_checking_resource_checker" class="Symfony\Component\Config\Resource\SelfCheckingResourceChecker" public="false">
       <tag name="config_cache.resource_checker" priority="-990"/>
+    </service>
+    <service id="services_resetter" class="Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter" public="true">
+      <argument type="iterator">
+        <argument key="cache.app" type="service" id="cache.app" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.system" type="service" id="cache.system" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.validator" type="service" id="cache.validator" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.serializer" type="service" id="cache.serializer" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.annotations" type="service" id="cache.annotations" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.property_info" type="service" id="cache.property_info" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.messenger.restart_workers_signal" type="service" id="cache.messenger.restart_workers_signal" on-invalid="ignore_uninitialized"/>
+      </argument>
+      <argument type="collection">
+        <argument key="cache.app">reset</argument>
+        <argument key="cache.system">reset</argument>
+        <argument key="cache.validator">reset</argument>
+        <argument key="cache.serializer">reset</argument>
+        <argument key="cache.annotations">reset</argument>
+        <argument key="cache.property_info">reset</argument>
+        <argument key="cache.messenger.restart_workers_signal">reset</argument>
+      </argument>
     </service>
     <service id="reverse_container" class="Symfony\Component\DependencyInjection\ReverseContainer" public="false">
       <argument type="service" id="service_container"/>
@@ -523,6 +490,7 @@
     </service>
     <service id="cache.app" class="Symfony\Component\Cache\Adapter\FilesystemAdapter" public="true">
       <tag name="cache.pool"/>
+      <tag name="kernel.reset" method="reset"/>
       <argument>HtjfHcc2ma</argument>
       <argument>0</argument>
       <argument>/var/www/current/var/cache/dev/pools</argument>
@@ -540,6 +508,7 @@
     </service>
     <service id="cache.system" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="true">
       <tag name="cache.pool"/>
+      <tag name="kernel.reset" method="reset"/>
       <argument>gbrekRA5eO</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
@@ -549,6 +518,7 @@
     </service>
     <service id="cache.validator" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false">
       <tag name="cache.pool"/>
+      <tag name="kernel.reset" method="reset"/>
       <argument>ny3N2S1Tcj</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
@@ -558,6 +528,7 @@
     </service>
     <service id="cache.serializer" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false">
       <tag name="cache.pool"/>
+      <tag name="kernel.reset" method="reset"/>
       <argument>aV2CrSkh6V</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
@@ -567,6 +538,7 @@
     </service>
     <service id="cache.annotations" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false">
       <tag name="cache.pool"/>
+      <tag name="kernel.reset" method="reset"/>
       <argument>ZBQ9nJ2hoB</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
@@ -576,6 +548,7 @@
     </service>
     <service id="cache.property_info" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false">
       <tag name="cache.pool"/>
+      <tag name="kernel.reset" method="reset"/>
       <argument>7Aa2uuZkcH</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
@@ -585,6 +558,7 @@
     </service>
     <service id="cache.messenger.restart_workers_signal" class="Symfony\Component\Cache\Adapter\FilesystemAdapter" public="false">
       <tag name="cache.pool"/>
+      <tag name="kernel.reset" method="reset"/>
       <argument>DitOU24+n2</argument>
       <argument>0</argument>
       <argument>/var/www/current/var/cache/dev/pools</argument>
@@ -594,7 +568,7 @@
       </call>
     </service>
     <service id="cache.adapter.system" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" abstract="true">
-      <tag name="cache.pool" clearer="cache.system_clearer"/>
+      <tag name="cache.pool" clearer="cache.system_clearer" reset="reset"/>
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
@@ -604,7 +578,7 @@
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.adapter.apcu" class="Symfony\Component\Cache\Adapter\ApcuAdapter" public="false" abstract="true">
-      <tag name="cache.pool" clearer="cache.default_clearer"/>
+      <tag name="cache.pool" clearer="cache.default_clearer" reset="reset"/>
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
@@ -614,7 +588,7 @@
       </call>
     </service>
     <service id="cache.adapter.doctrine" class="Symfony\Component\Cache\Adapter\DoctrineAdapter" public="false" abstract="true">
-      <tag name="cache.pool" provider="cache.default_doctrine_provider" clearer="cache.default_clearer"/>
+      <tag name="cache.pool" provider="cache.default_doctrine_provider" clearer="cache.default_clearer" reset="reset"/>
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument></argument>
@@ -624,7 +598,7 @@
       </call>
     </service>
     <service id="cache.adapter.filesystem" class="Symfony\Component\Cache\Adapter\FilesystemAdapter" public="false" abstract="true">
-      <tag name="cache.pool" clearer="cache.default_clearer"/>
+      <tag name="cache.pool" clearer="cache.default_clearer" reset="reset"/>
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
@@ -635,13 +609,13 @@
       </call>
     </service>
     <service id="cache.adapter.psr6" class="Symfony\Component\Cache\Adapter\ProxyAdapter" public="false" abstract="true">
-      <tag name="cache.pool" provider="cache.default_psr6_provider" clearer="cache.default_clearer"/>
+      <tag name="cache.pool" provider="cache.default_psr6_provider" clearer="cache.default_clearer" reset="reset"/>
       <argument></argument>
       <argument></argument>
       <argument>0</argument>
     </service>
     <service id="cache.adapter.redis" class="Symfony\Component\Cache\Adapter\RedisAdapter" public="false" abstract="true">
-      <tag name="cache.pool" provider="cache.default_redis_provider" clearer="cache.default_clearer"/>
+      <tag name="cache.pool" provider="cache.default_redis_provider" clearer="cache.default_clearer" reset="reset"/>
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument></argument>
@@ -675,7 +649,7 @@
       </call>
     </service>
     <service id="cache.adapter.array" class="Symfony\Component\Cache\Adapter\ArrayAdapter" public="false" abstract="true">
-      <tag name="cache.pool" clearer="cache.default_clearer"/>
+      <tag name="cache.pool" clearer="cache.default_clearer" reset="reset"/>
       <tag name="monolog.logger" channel="cache"/>
       <argument>0</argument>
       <call method="setLogger">
@@ -716,7 +690,7 @@
       </argument>
     </service>
     <service id=".1_NativeFileSessionHandler~AlkEeJE" class="Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler" public="false">
-      <argument>/var/www/current/var/cache/dev/sessions</argument>
+      <argument></argument>
     </service>
     <service id="session" class="Symfony\Component\HttpFoundation\Session\Session" public="true">
       <argument type="service" id="session.storage.native"/>
@@ -804,15 +778,6 @@
       </call>
       <call method="addLoader">
         <argument type="service" id="routing.loader.service"/>
-      </call>
-      <call method="addLoader">
-        <argument type="service" id="routing.loader.annotation"/>
-      </call>
-      <call method="addLoader">
-        <argument type="service" id="routing.loader.annotation.directory"/>
-      </call>
-      <call method="addLoader">
-        <argument type="service" id="routing.loader.annotation.file"/>
       </call>
     </service>
     <service id="routing.loader.xml" class="Symfony\Component\Routing\Loader\XmlFileLoader" public="false">
@@ -903,109 +868,10 @@
       <argument>null</argument>
       <argument>null</argument>
     </service>
-    <service id="routing.loader.annotation" class="Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader" public="false">
-      <tag name="routing.loader" priority="-10"/>
-      <argument type="service" id="annotations.cached_reader"/>
-    </service>
-    <service id="routing.loader.annotation.directory" class="Symfony\Component\Routing\Loader\AnnotationDirectoryLoader" public="false">
-      <tag name="routing.loader" priority="-10"/>
-      <argument type="service" id="file_locator"/>
-      <argument type="service" id="routing.loader.annotation"/>
-    </service>
-    <service id="routing.loader.annotation.file" class="Symfony\Component\Routing\Loader\AnnotationFileLoader" public="false">
-      <tag name="routing.loader" priority="-10"/>
-      <argument type="service" id="file_locator"/>
-      <argument type="service" id="routing.loader.annotation"/>
-    </service>
-    <service id=".2_PhpArrayAdapter~dUODmk4" class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" public="false">
-      <argument>/var/www/current/var/cache/dev/annotations.php</argument>
-      <argument type="service" id="cache.annotations"/>
-      <factory class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" method="create"/>
-    </service>
-    <service id=".1_ArrayCache~dUODmk4" class="Doctrine\Common\Cache\ArrayCache" public="false"/>
-    <service id="annotations.reader" class="Doctrine\Common\Annotations\AnnotationReader" public="false">
-      <call method="addGlobalIgnoredName">
-        <argument>required</argument>
-        <argument type="service" id="annotations.dummy_registry"/>
-      </call>
-    </service>
-    <service id="annotations.dummy_registry" class="Doctrine\Common\Annotations\AnnotationRegistry" public="false">
-      <call method="registerUniqueLoader">
-        <argument>class_exists</argument>
-      </call>
-    </service>
-    <service id="annotations.cached_reader" class="Doctrine\Common\Annotations\CachedReader" public="false">
-      <tag name="annotations.cached_reader"/>
-      <argument type="service" id="annotations.reader"/>
-      <argument type="service" id=".1_ArrayCache~dUODmk4"/>
-      <argument>true</argument>
-      <property name="cacheProviderBackup" type="service" id="annotations.cache"/>
-    </service>
-    <service id="annotations.filesystem_cache" class="Doctrine\Common\Cache\FilesystemCache" public="false">
-      <argument></argument>
-    </service>
-    <service id="annotations.cache_warmer" class="Symfony\Bundle\FrameworkBundle\CacheWarmer\AnnotationsCacheWarmer" public="false">
-      <tag name="kernel.cache_warmer"/>
-      <argument type="service" id="annotations.reader"/>
-      <argument>/var/www/current/var/cache/dev/annotations.php</argument>
-      <argument>#^Symfony\\(?:Component\\HttpKernel\\|Bundle\\FrameworkBundle\\Controller\\(?!AbstractController$|Controller$))#</argument>
-      <argument>true</argument>
-    </service>
-    <service id="annotations.cache" class="Symfony\Component\Cache\DoctrineProvider" public="false">
-      <argument type="service" id=".2_PhpArrayAdapter~dUODmk4"/>
-    </service>
     <service id="mime_types" class="Symfony\Component\Mime\MimeTypes" public="false">
       <call method="setDefault">
         <argument type="service" id="mime_types"/>
       </call>
-    </service>
-    <service id="sensio_framework_extra.controller.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener" public="false">
-      <tag name="kernel.event_subscriber"/>
-      <tag name="container.hot_path"/>
-      <argument type="service" id="annotations.cached_reader"/>
-    </service>
-    <service id="sensio_framework_extra.converter.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener" public="false">
-      <tag name="kernel.event_subscriber"/>
-      <tag name="container.hot_path"/>
-      <argument type="service" id="sensio_framework_extra.converter.manager"/>
-      <argument>true</argument>
-    </service>
-    <service id="sensio_framework_extra.converter.manager" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager">
-      <call method="add">
-        <argument type="service" id="sensio_framework_extra.converter.doctrine.orm"/>
-        <argument>0</argument>
-        <argument>doctrine.orm</argument>
-      </call>
-      <call method="add">
-        <argument type="service" id="framework_extra_bundle.date_time_param_converter"/>
-        <argument>0</argument>
-        <argument>datetime</argument>
-      </call>
-    </service>
-    <service id="sensio_framework_extra.converter.doctrine.orm" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter" public="false">
-      <tag name="request.param_converter" converter="doctrine.orm"/>
-      <argument>null</argument>
-      <argument>null</argument>
-    </service>
-    <service id="framework_extra_bundle.date_time_param_converter" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter" public="false">
-      <tag name="request.param_converter" converter="datetime"/>
-    </service>
-    <service id="sensio_framework_extra.view.guesser" class="Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser" public="false">
-      <argument type="service" id="kernel"/>
-    </service>
-    <service id="sensio_framework_extra.cache.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\HttpCacheListener" public="false">
-      <tag name="kernel.event_subscriber"/>
-      <tag name="container.hot_path"/>
-      <tag name="container.hot_path"/>
-    </service>
-    <service id="framework_extra_bundle.event.is_granted" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\IsGrantedListener" public="false">
-      <tag name="kernel.event_subscriber"/>
-      <tag name="container.hot_path"/>
-      <argument type="service" id="framework_extra_bundle.argument_name_convertor"/>
-      <argument>null</argument>
-    </service>
-    <service id="framework_extra_bundle.argument_name_convertor" class="Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter" public="false">
-      <argument type="service" id="argument_metadata_factory"/>
     </service>
     <service id=".service_locator.9_yeNH1" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
@@ -1134,8 +1000,6 @@
     <service id="Symfony\Component\Routing\Matcher\UrlMatcherInterface" alias="router.default" public="false"/>
     <service id="Symfony\Component\Routing\RequestContextAwareInterface" alias="router.default" public="false"/>
     <service id="Symfony\Component\Routing\RequestContext" alias="router.request_context" public="false"/>
-    <service id="annotation_reader" alias="annotations.cached_reader"/>
-    <service id="Doctrine\Common\Annotations\Reader" alias="annotations.cached_reader" public="false"/>
     <service id="argument_resolver.controller_locator" alias=".service_locator.9_yeNH1"/>
     <service id="Psr\Log\LoggerInterface" alias="logger" public="false"/>
   </services>

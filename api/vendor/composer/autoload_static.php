@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8267d0e6d801ec2a1b2aac25159418b0
+class ComposerStaticInitca586dd4b045781e6c31f7620bcde8d0
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -40,21 +40,12 @@ class ComposerStaticInit8267d0e6d801ec2a1b2aac25159418b0
             'Symfony\\Component\\Config\\' => 25,
             'Symfony\\Component\\Cache\\' => 24,
             'Symfony\\Bundle\\FrameworkBundle\\' => 31,
-            'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
         ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
-        ),
-        'D' => 
-        array (
-            'Doctrine\\Common\\Lexer\\' => 22,
-            'Doctrine\\Common\\Collections\\' => 28,
-            'Doctrine\\Common\\Cache\\' => 22,
-            'Doctrine\\Common\\Annotations\\' => 28,
-            'Doctrine\\Common\\' => 16,
         ),
         'A' => 
         array (
@@ -160,10 +151,6 @@ class ComposerStaticInit8267d0e6d801ec2a1b2aac25159418b0
         array (
             0 => __DIR__ . '/..' . '/symfony/framework-bundle',
         ),
-        'Sensio\\Bundle\\FrameworkExtraBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/sensio/framework-extra-bundle',
-        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
@@ -175,28 +162,6 @@ class ComposerStaticInit8267d0e6d801ec2a1b2aac25159418b0
         'Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
-        ),
-        'Doctrine\\Common\\Lexer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
-        ),
-        'Doctrine\\Common\\Collections\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/collections/lib/Doctrine/Common/Collections',
-        ),
-        'Doctrine\\Common\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
-        ),
-        'Doctrine\\Common\\Annotations\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
-        ),
-        'Doctrine\\Common\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/event-manager/lib/Doctrine/Common',
-            1 => __DIR__ . '/..' . '/doctrine/persistence/lib/Doctrine/Common',
-            2 => __DIR__ . '/..' . '/doctrine/reflection/lib/Doctrine/Common',
         ),
         'App\\Tests\\' => 
         array (
@@ -215,9 +180,9 @@ class ComposerStaticInit8267d0e6d801ec2a1b2aac25159418b0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8267d0e6d801ec2a1b2aac25159418b0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8267d0e6d801ec2a1b2aac25159418b0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8267d0e6d801ec2a1b2aac25159418b0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitca586dd4b045781e6c31f7620bcde8d0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitca586dd4b045781e6c31f7620bcde8d0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitca586dd4b045781e6c31f7620bcde8d0::$classMap;
 
         }, null, ClassLoader::class);
     }
